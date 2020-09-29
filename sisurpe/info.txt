@@ -1,0 +1,150 @@
+A pasta app não queremos que seja acessada logo criamos um arquivo .htaccess para impedir o acesso.
+Então dentro da pasta app criamos um arquivo .htaccess e dentro desse arquivo apenas colocamos a linha
+Options -Indexes
+Que apenas diz -Indexes tirar o index o que nega o acesso
+Se colocasse +Indexes iria habilitar a navegação dentro da pasta novamente
+
+Para redirecionar toda url para o Index vamos usar o model rewrite do apache
+se o usuário digitar ip/mvc/teste supondo que teste não existe
+vai ser redirecionado para ip/mvc/public/index.php
+Esse .htaccess colocamos na pasta public
+dentro desse arquivo colocamos o seguinte código
+<ifModule mod_rewrite.c>
+  Options -Multiviews
+  RewriteEngine On
+  RewriteBase /mvc/public
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.+) index.php?url=$1 [QSA,L]
+</IfModule>
+Se o arquivo existir carrega o arquivo
+
+Na linha RewriteBase /mvc/public está o diretório do projeto
+Logo todo projeto se quiser usar esse mvc tem que mudar de /mvc/public para /nomedoprojeto/public
+Agora toda vez que digitar uma url que não existe ele vai redirecionar para o index
+Essa linha RewriteRule ^(.+) index.php?url=$1 [QSA,L] onde tem o $1 é uma variável
+isso permite que ao invez de ter que digitar o ? para passar parâmetros como
+public?url=post possamos passar apenas public/post
+
+O arquivo bootstrap.php vai ter um require com todos os arquivos necessários para a aplicação
+então damos um require do bootstrap.php no index.php assim o index.php passa a ter todos os arquivos
+necessários da aplicação.
+
+Adicionamos mais um .htaccess na raiz da aplicação, no mesmo diretório onde está app e public
+neste caso na pasta mvc para tirar o /public da url
+não queremos que o usuário tenha que digitar ip/mvc/public e sim apenas ip/mvc
+Colocamos o seguinte código
+<IfModule mod_rewrite.c>
+  RewriteEngine on
+  RewriteRule ^$ public/ [L]
+  RewriteRule (.*) public/$1 [L]
+</IfModule>
+
+Todos os arquivos dentro de libreries tem que ser com a primeira letra em maiúscula pois como são classes
+quando chamarmos na aplicação chamaremos com a primeira letra em maiúscula que é o padrão das classes
+
+Adicionamos os arquivo da pasta libraries no arquivo bootstrap.php, que é chamado pelo index
+    require_once 'libraries/Core.php';
+    require_once 'libraries/Controller.php';
+    require_once 'libraries/Database.php';
+
+Dentro do arquivo Core.php criamos a classe Core
+Dentro da classe core temos as prorpriedades
+     protected $currentController = 'Pages';
+     protected $currentMethod = 'index';
+     protected $params = [];
+Que precisamos para saber que controller, que método e os parametros para carregar a página
+por padrão sempre vai carrecar o controller Pages e o método index do controller Pages
+Precisamos pegar a url e quebrar ela em um array para termos esses parametros
+quando for digitado pelo usuário
+exemplo
+mvc/posts/edit/3
+temos que explodir a url e colocar em um array para jogar os valores nos parâmetros
+     protected $currentController = 'Posts';
+     protected $currentMethod = 'edit';
+     protected $params = [3];
+
+Controller.php
+carrega os models e views
+O sistema carrega o public/index.php
+que por sua vez carrega o bootstrap.php
+que por sua vez carrega o controller.php
+que por sua vez carrega o model ou view desejado
+Obs.: para poder acessar o controller a classe tem que extender o controller
+ex: class Pages extends Controller
+$this->view('index');
+require_once('../app/models/' . $model . '.php');
+que vai ser:
+require_once('../app/models/index.php');
+
+Workflow classe Posts
+
+1 Model /models/Post.php 
+obs.: no singular
+como a classe database está disponível aqui? Porque ela está sendo carregada no bootstrap.php no outoload
+tudo que está na pasta libraries que é carregado no index
+logo fica sempre disponível
+class Post{
+        private $db;
+
+        public function __construct(){
+            $this->db = new Database;
+        }
+
+        public function getPosts(){
+            $this->db->query("SELECT * FROM posts");
+
+            return $this->db->resultSet();
+        }
+
+    }
+
+2 Controller /controllers/Posts.php
+obs.: no plural
+class Posts extends Controller{
+        public function __construct(){
+            // 1 Chama o model
+          $this->postModel = $this->model('Post');
+        }
+
+        public function index(){
+            // Posso passar valores aqui pois no view está definido um array para isso
+            // public function view($view, $data = []){
+                // 2 Chama um método
+                $posts = $this->postModel->getPosts();
+                
+                // 3 coloca os valores no array
+                $data = [
+                'title' => 'Welcome',
+                'posts' => $posts
+            ];
+
+            // 4 Chama o view passando os dados
+            $this->view('pages/index', $data);
+        }       
+}
+
+3 view /views/posts/index.php
+<?php require APPROOT . '/views/inc/header.php'; ?>
+<h1><?php echo $data['title'];?></h1>
+<ul>
+    <?php foreach($data['posts'] as $post) : ?>
+        <li><?php echo $post->title; ?></li>
+    <?php endforeach; ?>
+</ul>
+<?php require APPROOT . '/views/inc/footer.php'; ?>
+
+
+
+SEQUENCIA DE CRIAÇÃO DE NOVO CONTROLLER/MODEL/VIEW
+1 - CRIAR UM NOVO CONTROLLER /controllers/Novocontroller
+    obs.: Primeira letra em maiúsculo e no plural
+    cria dentro desse arquivo a classe do controller, extende a classe Controler e cria os métodos
+    class Users extends Controller{
+        public function register(){
+            echo 'Registro';
+        }
+    }
+    neste momento se digitar no navegador localhost/shareposts/users/register
+    tem que apareces Registro
+2 - 
