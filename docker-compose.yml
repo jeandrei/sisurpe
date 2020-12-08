@@ -42,7 +42,7 @@ services:
       - "443:443"
     volumes:
       #/www/desenvolvimento local no host onde vamos montar a pasta /var/www/html do container
-      - /www/desenvolvimento:/var/www/html
+      - /www/sisurpe:/var/www/html
     links:
       #linka ou seja permite comunicação com o container abaixo db
       - db
