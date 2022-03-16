@@ -58,7 +58,7 @@
                 case is_null($value):
                     $type = PDO::PARAM_NULL;
                     break;
-                default;
+                default:
                     $type = PDO::PARAM_STR;                                 
             }
         }
