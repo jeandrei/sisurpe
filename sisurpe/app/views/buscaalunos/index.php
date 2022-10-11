@@ -16,7 +16,7 @@
   $result = $data['results'];
 ?>
 
-<form id="filtrar" action="<?php echo URLROOT; ?>/buscaalunos/index" method="post" enctype="multipart/form-data">
+<form id="filtrar" action="<?php echo URLROOT; ?>/buscaalunos/index" method="GET" enctype="multipart/form-data">
   <div class="row">
     <!-- COLUNA 1 NOME-->
     <div class="col-lg-4">
@@ -29,7 +29,7 @@
                 id="nome_aluno" 
                 maxlength="60"
                 class="form-control"
-                value="<?php if(isset($_POST['nome_aluno'])){htmlout($_POST['nome_aluno']);} ?>"
+                value="<?php if(isset($_GET['nome_aluno'])){htmlout($_GET['nome_aluno']);} ?>"
                 onkeydown="upperCaseF(this)"   
                 >
       <!--<div class="col-lg-4">-->

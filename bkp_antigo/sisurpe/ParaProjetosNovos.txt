@@ -1,0 +1,56 @@
+1 - Altere o arquivo public/.htaccess
+    na linha 4  RewriteBase /suapasta/public
+    no lugar de sua pasta coloque a pasta do projeto
+    neste caso de modelo
+     RewriteBase /mvclogin/public
+
+2 - Crie o banco com base no banco de dados que está na pasta
+    Altere o nome do banco e edite as suas necessidades    
+    bd/mvclogin.sql
+    já tem um usuário criado para teste 
+    email: jeandreiwalter@gmail.com
+    senha: 123456
+
+3 - Altere os parâmetros do arquivo de configuração em app/config/config.php
+    // PARAMETROS DO BANCO DE DADOS
+    define('DB_HOST', 'mysql'); aqui se for usando o docker coloque o nome do container
+    define('DB_USER', 'root');
+    define('DB_PASS', 'rootadm');
+    define('DB_NAME', 'mvclogin');
+
+    /* App Root
+     Temos que pegar do root até a pasta app
+     só __FILE__ traz todo o caminho
+     /var/www/html/mvc/app/config/config.php
+     para tirar um nível no final usamos a função
+     dirname() que tira um nível, como temos que tirar o config.php
+     e config temos que usar duas vezes a função
+     resultado será /var/www/html/mvc/app
+     Sepre que quiser adicionar algo da pasta app use
+     APPROOT
+     */
+    define('APPROOT', dirname(dirname(__FILE__)));
+
+    //URL Root usado para links
+    // sempre que quiser usar link do public ou frontend
+    // use URLROOT
+    define('URLROOT', 'http://' . $_SERVER["SERVER_NAME"] . '/mvclogin');    
+
+    // Site Name
+    define('SITENAME', 'MVC Login');
+
+    // App Version
+    define('APPVERSION', '1.0.0');
+
+
+4 - Em app/controllers/Pages.php função index() altere
+                'title' => 'MVC Login',
+                'description'=> 'MVC com login pronto'
+                 
+5 - Em app/controllers/Pages.php função about() altere     
+                'title' => 'Sobre Nós',
+                'description'=> 'Modelo MVC com login para novos projetos'
+
+
+
+    

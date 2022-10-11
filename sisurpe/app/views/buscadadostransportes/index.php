@@ -31,7 +31,7 @@
   $result = $data['results'];
 ?>
 
-<form id="filtrar" action="<?php echo URLROOT; ?>/buscadadostransportes/index" method="post" enctype="multipart/form-data">
+<form id="filtrar" action="<?php echo URLROOT; ?>/buscadadostransportes/index" method="GET" enctype="multipart/form-data">
   <div class="row">
     <!-- COLUNA 1 NOME-->
     <div class="col-lg-4">
@@ -40,11 +40,11 @@
             </label>
             <input 
                 type="text" 
-                name="buscanome" 
-                id="buscanome" 
+                name="nome_aluno" 
+                id="nome_aluno" 
                 maxlength="60"
                 class="form-control"
-                value="<?php if(isset($_POST['buscanome'])){htmlout($_POST['buscanome']);} ?>"
+                value="<?php if(isset($_GET['nome_aluno'])){htmlout($_GET['nome_aluno']);} ?>"
                 onkeydown="upperCaseF(this)"   
                 ><span class="invalid-feedback">
                     <?php // echo $data['nome_err']; ?>
@@ -62,7 +62,7 @@
                 id="ano" 
                 maxlength="60"
                 class="form-control"
-                value="<?php if(isset($_POST['ano'])){htmlout($_POST['ano']);} ?>"               
+                value="<?php if(isset($_GET['ano'])){htmlout($_GET['ano']);} ?>"               
                 ><span class="invalid-feedback">
                     <?php // echo $data['nome_err']; ?>
                 </span>
@@ -84,8 +84,8 @@
                 $linhas = $this->anualModel->getLinhas();                                     
                 foreach($linhas as $linha) : ?> 
                     <option value="<?php echo $linha->id; ?>"
-                                <?php if(isset($_POST['linha_id'])){
-                                echo $_POST['linha_id'] == $linha->id ? 'selected':'';
+                                <?php if(isset($_GET['linha_id'])){
+                                echo $_GET['linha_id'] == $linha->id ? 'selected':'';
                                 }
                                 ?>
                     >
@@ -117,8 +117,8 @@
                         $escolas = $this->anualModel->getEscolas();                                     
                         foreach($escolas as $escola) : ?> 
                             <option value="<?php echo $escola->id; ?>"
-                                        <?php if(isset($_POST['escola_id'])){
-                                        echo $_POST['escola_id'] == $escola->id ? 'selected':'';
+                                        <?php if(isset($_GET['escola_id'])){
+                                        echo $_GET['escola_id'] == $escola->id ? 'selected':'';
                                         }
                                         ?>
                             >
@@ -144,8 +144,8 @@
                         $etapas = $this->anualModel->getEtapas();                                     
                         foreach($etapas as $etapa) : ?> 
                             <option value="<?php echo $etapa->id; ?>"
-                                        <?php if(isset($_POST['etapa_id'])){
-                                        echo $_POST['etapa_id'] == $etapa->id ? 'selected':'';
+                                        <?php if(isset($_GET['etapa_id'])){
+                                        echo $_GET['etapa_id'] == $etapa->id ? 'selected':'';
                                         }
                                         ?>
                             >
@@ -163,10 +163,10 @@
                 class="form-control"      
                 name="turno"
                 id="turno">
-                <option value="NULL" <?php echo (($_POST['turno'])=="NULL") ? 'selected' : ''; ?> >Selecione</option>
-                <option value="M" <?php echo (($_POST['turno'])=="M") ? 'selected' : ''; ?> >Matutino</option>
-                <option value="V" <?php echo (($_POST['turno'])=="V") ? 'selected' : ''; ?> >Vespertino</option>
-                <option value="N" <?php echo (($_POST['turno'])=="N") ? 'selected' : ''; ?> >Noturno</option>
+                <option value="NULL" <?php echo (($_GET['turno'])=="NULL") ? 'selected' : ''; ?> >Selecione</option>
+                <option value="M" <?php echo (($_GET['turno'])=="M") ? 'selected' : ''; ?> >Matutino</option>
+                <option value="V" <?php echo (($_GET['turno'])=="V") ? 'selected' : ''; ?> >Vespertino</option>
+                <option value="N" <?php echo (($_GET['turno'])=="N") ? 'selected' : ''; ?> >Noturno</option>
             </select>         
         </div>
 

@@ -79,7 +79,7 @@ if(isset($data['error'])){
         </div>     
 
         <div class="bg-light p-2 mb-3">
-        Linhas que o aluno utiliza em: 
+        Linhas que o aluno utiliza: 
             <b>
                 <?php 
                     if($linhas = $this->transporteModel->getLinhasAlunoById($registro['aluno_id'])){ 

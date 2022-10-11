@@ -65,6 +65,7 @@
         }
 
         $sql .= " ORDER BY linha,escola,etapa,nome_aluno ASC"; 
+        
 
         //SE NÃO FOR PARA IMPRIMIR FORMULÁRIO ELE CHAMA A PAGINAÇÃO
         if($imprimir==0){

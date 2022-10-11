@@ -42,7 +42,7 @@ services:
       - "443:443"
     volumes:
       #/www/desenvolvimento local no host onde vamos montar a pasta /var/www/html do container
-      - /www/sisurpe:/var/www/html
+      - /www/sisurpe:/var/www/html/sisurpe
     links:
       #linka ou seja permite comunicação com o container abaixo db
       - db
@@ -71,7 +71,7 @@ services:
         #./dumps/ijdb.sql nosso backup do banco
         #/docker-entrypoint-initdb.d/ijdb.sql inicializa a restauração do banco
         #- ./dumps/mvc.sql:/docker-entrypoint-initdb.d/shareposts.sql modelo
-        - ./desenvolvimento/mvclogin/bd/mvclogin.sql:/docker-entrypoint-initdb.d/mvclogin.sql  
+        - /www/sisurpe/bd/sisurpe.sql:/docker-entrypoint-initdb.d/sisurpe.sql  
     networks:
         #nome da rede de comunicação entre containers
         - default

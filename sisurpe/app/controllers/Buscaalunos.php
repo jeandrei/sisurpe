@@ -19,33 +19,27 @@
             'description' => 'Busca por registros de alunos'          
         ]; 
 
-        // INÍCIO PARTE PAGINAÇÃO SÓ COPIAR ESSA PARTE MUDAR A URL E COLOCAR OS PARAMETROS EM named_params
-        // O STATUS EU NÃO PASSO PARA O A CONSULTA É APENAS PARA MANTER AS INFORMAÇÕES APÓS CLICAR NO LINK DA PAGINAÇÃO
-        // CASO CONTRÁRIO TODA VEZ QUE CLICASSE NO LINK DA PAGINAÇÃO ELE VOLTA PARA O VALOR PADRÃO DO CAMPO DE BUSCA
-        if(isset($_GET['page']))
-        {
-            //ENTRA AQUI SE FOR CLICADO PELO LINK DA PAGINAÇÃO
-            $page = $_GET['page'];          
-            
-            $nome_aluno =$_GET['nome_aluno'];        
-            $_POST['nome_aluno'] =  $nome_aluno;         
-            
-        }
-        else
-        {           
-            // SE ENTROU AQUI É QUE FOI CARREGADO A PÁGINA PELA PRIMEIRA VEZ OU FOI CLICADO EM ATUALIZAR
-            // LOGO SE TENHO ALGUM VALOR NO POST DE BUSCA PASSO PARA A VARIÁVEL STATUS E POR FIM SE AINDA ASSIM 
-            //A VARIÁVEL ESTIVER VAZIA PASSO O VALOR PADRÃO 'Todos'
-            $nome_aluno = $_POST['nome_aluno'];  
-
-            $page = 1;
-        }      
+      
+        /** 01
+         * IMPORTANTE O MÉTODO DO FORMULÁRIO TEM QUE SER GET
+         * E O **NOME DOCAMPO DE BUSCA TEM QUE SER IGUAL AO DO BANCO DE DADOS**
+         * verifica a página que está passando se não tiver
+         * página no get vai passar pagina 1
+        */
+        if(isset($_GET['page']))  
+        {  
+            $page = $_GET['page'];  
+        }  
+        else  
+        {  
+            $page = 1;  
+        }  
                   
         $options = array(
           'results_per_page' => 10,
-          'url' => URLROOT . '/buscaalunos/index.php?page=*VAR*&nome_aluno=' . $nome_aluno,
+          'url' => URLROOT . '/buscaalunos/index.php?page=*VAR*&nome_aluno=' . $_GET['nome_aluno'],
           'named_params' => array(
-                                    ':nome_aluno' => $nome_aluno
+                                    ':nome_aluno' => $_GET['nome_aluno']
                                 )     
         );
       

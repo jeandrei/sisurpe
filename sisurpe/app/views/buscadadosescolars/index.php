@@ -34,7 +34,7 @@
   $result = $data['results'];
 ?>
 
-<form id="filtrar" action="<?php echo URLROOT; ?>/buscadadosescolars/index" method="post" enctype="multipart/form-data">
+<form id="filtrar" action="<?php echo URLROOT; ?>/buscadadosescolars/index" method="GET" enctype="multipart/form-data">
   <div class="row"> 
       <!-- COLUNA 1 ANO-->
       <div class="col-lg-2">
@@ -47,7 +47,7 @@
                   id="ano" 
                   maxlength="60"
                   class="form-control"
-                  value="<?php if(isset($_POST['ano'])){htmlout($_POST['ano']);} ?>"               
+                  value="<?php if(isset($_GET['ano'])){htmlout($_GET['ano']);} ?>"               
                   >
         <!--<div class="col-lg-4">-->
         </div>
@@ -72,8 +72,8 @@
                     $escolas = $this->anualModel->getEscolas();                                     
                     foreach($escolas as $escola) : ?> 
                         <option value="<?php echo $escola->id; ?>"
-                                    <?php if(isset($_POST['escola_id'])){
-                                    echo $_POST['escola_id'] == $escola->id ? 'selected':'';
+                                    <?php if(isset($_GET['escola_id'])){
+                                    echo $_GET['escola_id'] == $escola->id ? 'selected':'';
                                     }
                                     ?>
                         >
@@ -99,8 +99,8 @@
                     $etapas = $this->anualModel->getEtapas();                                     
                     foreach($etapas as $etapa) : ?> 
                         <option value="<?php echo $etapa->id; ?>"
-                                    <?php if(isset($_POST['etapa_id'])){
-                                    echo $_POST['etapa_id'] == $etapa->id ? 'selected':'';
+                                    <?php if(isset($_GET['etapa_id'])){
+                                    echo $_GET['etapa_id'] == $etapa->id ? 'selected':'';
                                     }
                                     ?>
                         >
@@ -118,10 +118,10 @@
           class="form-control"      
           name="turno"
           id="turno">
-            <option value="NULL" <?php echo (($_POST['turno'])=="NULL") ? 'selected' : ''; ?> >Selecione</option>
-            <option value="M" <?php echo (($_POST['turno'])=="M") ? 'selected' : ''; ?> >Matutino</option>
-            <option value="V" <?php echo (($_POST['turno'])=="V") ? 'selected' : ''; ?> >Vespertino</option>
-            <option value="N" <?php echo (($_POST['turno'])=="N") ? 'selected' : ''; ?> >Noturno</option>
+            <option value="NULL" <?php echo (($_GET['turno'])=="NULL") ? 'selected' : ''; ?> >Selecione</option>
+            <option value="M" <?php echo (($_GET['turno'])=="M") ? 'selected' : ''; ?> >Matutino</option>
+            <option value="V" <?php echo (($_GET['turno'])=="V") ? 'selected' : ''; ?> >Vespertino</option>
+            <option value="N" <?php echo (($_GET['turno'])=="N") ? 'selected' : ''; ?> >Noturno</option>
         </select>         
       </div>  
   
@@ -140,7 +140,7 @@
             placeholder="Tamanho do Kit de Inverno">
             <option value="NULL">Selecione o Tamanho</option>
             <?php                            
-              echo(imptamanhounif($_POST['kit_inverno']));
+              echo(imptamanhounif($_GET['kit_inverno']));
             ?>
           </select>
       </div>
@@ -154,7 +154,7 @@
               placeholder="Tamanho do Kit de Verão">
               <option value="NULL">Selecione o Tamanho</option>
               <?php
-                echo(imptamanhounif($_POST['kit_verao']));
+                echo(imptamanhounif($_GET['kit_verao']));
               ?>
             </select>
       </div> 
@@ -168,7 +168,7 @@
             placeholder="Tamanho do Calçado">
             <option value="NULL">Selecione o Tamanho</option>
             <?php
-              echo(imptamanhounif($_POST['tam_calcado']));
+              echo(imptamanhounif($_GET['tam_calcado']));
             ?>
           </select>
       </div>  
@@ -180,9 +180,9 @@
           class="form-control"      
           name="sexo"
           id="sexo">
-            <option value="NULL" <?php echo (($_POST['sexo'])=="NULL") ? 'selected' : ''; ?> >Selecione</option>
-            <option value="M" <?php echo (($_POST['sexo'])=="M") ? 'selected' : ''; ?> >Masculino</option>
-            <option value="F" <?php echo (($_POST['sexo'])=="F") ? 'selected' : ''; ?> >Feminino</option>              
+            <option value="NULL" <?php echo (($_GET['sexo'])=="NULL") ? 'selected' : ''; ?> >Selecione</option>
+            <option value="M" <?php echo (($_GET['sexo'])=="M") ? 'selected' : ''; ?> >Masculino</option>
+            <option value="F" <?php echo (($_GET['sexo'])=="F") ? 'selected' : ''; ?> >Feminino</option>              
         </select>         
       </div>   
      

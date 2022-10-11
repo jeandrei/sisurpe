@@ -19,61 +19,33 @@
             'description' => 'Busca por registros anuais do Transporte Escolar'          
         ];
 
-        // INÍCIO PARTE PAGINAÇÃO SÓ COPIAR ESSA PARTE MUDAR A URL E COLOCAR OS PARAMETROS EM named_params
-        // O STATUS EU NÃO PASSO PARA O A CONSULTA É APENAS PARA MANTER AS INFORMAÇÕES APÓS CLICAR NO LINK DA PAGINAÇÃO
-        // CASO CONTRÁRIO TODA VEZ QUE CLICASSE NO LINK DA PAGINAÇÃO ELE VOLTA PARA O VALOR PADRÃO DO CAMPO DE BUSCA
-        if(isset($_GET['page']))
-        {
-            //ENTRA AQUI SE FOR CLICADO PELO LINK DA PAGINAÇÃO
-            $page = $_GET['page']; 
-            
-            
-            $nome =$_GET['nome'];
-            $_POST['buscanome'] =  $nome;
-
-            $linha_id =$_GET['linha_id'];
-            $_POST['linha_id'] =  $linha_id;
-
-
-            $escola_id =$_GET['escola_id'];
-            $_POST['escola_id'] =  $escola_id;
-
-            $etapa_id =$_GET['etapa_id'];
-            $_POST['etapa_id'] =  $etapa_id;
-
-            $turno =$_GET['turno'];
-            $_POST['turno'] =  $turno;
-
-            $ano =$_GET['ano'];
-            $_POST['ano'] =  $ano;
-            
-        }
-        else
-        {           
-            // SE ENTROU AQUI É QUE FOI CARREGADO A PÁGINA PELA PRIMEIRA VEZ OU FOI CLICADO EM ATUALIZAR
-            // LOGO SE TENHO ALGUM VALOR NO POST DE BUSCA PASSO PARA A VARIÁVEL STATUS E POR FIM SE AINDA ASSIM 
-            //A VARIÁVEL ESTIVER VAZIA PASSO O VALOR PADRÃO 'Todos'
-            $nome = $_POST['buscanome'];
-            $linha_id = $_POST['linha_id'];
-            $escola_id = $_POST['escola_id'];
-            $etapa_id = $_POST['etapa_id'];
-            $turno = $_POST['turno'];
-            $ano = $_POST['ano'];
-
-            $page = 1;
-        }             
+        /** 
+         * IMPORTANTE O MÉTODO DO FORMULÁRIO TEM QUE SER GET
+         * E O **NOME DOCAMPO DE BUSCA TEM QUE SER IGUAL AO DO BANCO DE DADOS**
+         * verifica a página que está passando se não tiver
+         * página no get vai passar pagina 1
+         */
+        if(isset($_GET['page']))  
+        {  
+            $page = $_GET['page'];  
+        }  
+        else  
+        {  
+            $page = 1;  
+        }  
+        
                 
         $options = array(
             'results_per_page' => 10,
-            'url' => URLROOT . '/buscadadostransportes/index.php?page=*VAR*&nome=' . $nome . '&ano=' . $ano . '&linha_id=' . $linha_id . '&escola_id=' . $escola_id . '&etapa_id=' . $etapa_id . '&turno=' . $turno,
+            'url' => URLROOT . '/buscadadostransportes/index.php?page=*VAR*&nome=' . $_GET['nome_aluno'] . '&ano=' . $_GET['ano'] . '&linha_id=' . $_GET['linha_id'] . '&escola_id=' . $_GET['escola_id'] . '&etapa_id=' . $_GET['etapa_id'] . '&turno=' . $_GET['turno'],
             'named_params' => array(
-                                        ':nome' => $nome,
-                                        ':linha_id' => $linha_id,                                    
-                                        ':escola_id' => $escola_id,
-                                        ':etapa_id' => $etapa_id,
-                                        ':turno' => $turno,
-                                        ':ano' => $ano
-                                    )     
+                                    ':nome' => $_GET['nome_aluno'],
+                                    ':linha_id' => $_GET['linha_id'],                                  
+                                    ':escola_id' => $_GET['escola_id'],
+                                    ':etapa_id' => $_GET['etapa_id'],
+                                    ':turno' => $_GET['turno'],
+                                    ':ano' => $_GET['ano']
+                                        )     
         );
 
         
@@ -92,11 +64,11 @@
         //FIM PARTE PAGINAÇÃO RETORNANDO O ARRAY $data['paginate']  QUE VAI PARA A VARIÁVEL $paginate DO VIEW NESSE CASO O INDEX
 
         //SE O BOTÃO CLICADO FOR O IMPRIMIR EU CHAMO A FUNÇÃO getDados($page, $options,1) ONDE 1 É QUE É PARA IMPRIMIR E 0 É PARA LISTAR NA PAGINAÇÃO
-        if($_POST['botao'] == "Imprimir"){  
+        if($_GET['botao'] == "Imprimir"){  
             $data = $this->buscadadostransportesModel->getDados($page, $options,1);  
             // E AQUI CHAMO O RELATÓRIO          
             $this->view('relatorios/reTransporte' ,$data);
-        } else if($_POST['botao'] == "Imprimir Totais") {
+        } else if($_GET['botao'] == "Imprimir Totais") {
            // E AQUI CHAMO O RELATÓRIO TOTAIS CHAMO O RELATÓRIO DE TOTAIS
             $data = $this->buscadadostransportesModel->getTotais();            
             $this->view('relatorios/reTransporteTotais' ,$data);

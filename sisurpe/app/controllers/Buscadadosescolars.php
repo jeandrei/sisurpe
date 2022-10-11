@@ -20,70 +20,34 @@
             'description' => 'Busca por dados inseridos anualmente'          
         ];
       
-        if(isset($_GET['page'])){
-            
-            //ENTRA AQUI SE FOR CLICADO PELO LINK DA PAGINAÇÃO
-            $page = $_GET['page'];             
-            
-            $nome =$_GET['buscanome'];
-            $_POST['buscanome'] =  $nome;
-
-            $escola_id =$_GET['escola_id'];
-            $_POST['escola_id'] =  $escola_id;
-
-            $ano =$_GET['ano'];
-            $_POST['ano'] =  $ano;
-
-            $sexo =$_GET['sexo'];
-            $_POST['sexo'] =  $sexo;
-
-            $kit_inverno =$_GET['kit_inverno'];
-            $_POST['kit_inverno'] =  $kit_inverno;
-
-            $kit_verao =$_GET['kit_verao'];
-            $_POST['kit_verao'] =  $kit_verao;
-            
-            $tam_calcado =$_GET['tam_calcado'];
-            $_POST['tam_calcado'] =  $tam_calcado;
-           
-            $etapa_id =$_GET['etapa_id'];
-            $_POST['etapa_id'] =  $etapa_id;
-
-            $turno =$_GET['turno'];
-            $_POST['turno'] =  $turno;
-            
-        }
-        else
-        {           
-            // SE ENTROU AQUI É QUE FOI CARREGADO A PÁGINA PELA PRIMEIRA VEZ OU FOI CLICADO EM ATUALIZAR
-            // LOGO SE TENHO ALGUM VALOR NO POST DE BUSCA PASSO PARA A VARIÁVEL STATUS E POR FIM SE AINDA ASSIM 
-            //A VARIÁVEL ESTIVER VAZIA PASSO O VALOR PADRÃO 'Todos'
-            $nome = $_POST['buscanome'];
-            $escola_id = $_POST['escola_id'];
-            $ano = $_POST['ano'];
-            $sexo = $_POST['sexo'];
-            $kit_inverno = $_POST['kit_inverno'];            
-            $kit_verao = $_POST['kit_verao'];            
-            $tam_calcado = $_POST['tam_calcado'];            
-            $etapa_id = $_POST['etapa_id'];
-            $turno = $_POST['turno']; 
-
-            $page = 1;
-        }     
+        /** 
+         * IMPORTANTE O MÉTODO DO FORMULÁRIO TEM QUE SER GET
+         * E O **NOME DOCAMPO DE BUSCA TEM QUE SER IGUAL AO DO BANCO DE DADOS**
+         * verifica a página que está passando se não tiver
+         * página no get vai passar pagina 1
+         */
+        if(isset($_GET['page']))  
+        {  
+            $page = $_GET['page'];  
+        }  
+        else  
+        {  
+            $page = 1;  
+        }   
+                    
       
         $options = array(
             'results_per_page' => 10,
-            'url' => URLROOT . '/buscadadosescolars/index.php?page=*VAR*&nome=' . $nome . '&ano=' . $ano . '&sexo=' . $sexo . '&escola_id=' . $escola_id . '&etapa_id=' . $etapa_id . '&turno=' . $turno . '&kit_inverno=' . $kit_inverno  . '&kit_verao=' . $kit_verao . '&tam_calcado=' . $tam_calcado,
-            'named_params' => array(
-                                        ':nome' => $nome,
-                                        ':escola_id' => $escola_id,
-                                        ':ano' => $ano,
-                                        ':sexo' => $sexo,
-                                        ':kit_inverno' => $kit_inverno,                                        
-                                        ':kit_verao' => $kit_verao,                                        
-                                        ':tam_calcado' => $tam_calcado,                                        
-                                        ':etapa_id' => $etapa_id,
-                                        ':turno' => $turno
+            'url' => URLROOT . '/buscadadosescolars/index.php?page=*VAR*&ano=' . $_GET['ano'] . '&sexo=' . $_GET['sexo'] . '&escola_id=' . $_GET['escola_id'] . '&etapa_id=' . $_GET['etapa_id'] . '&turno=' . $_GET['turno'] . '&kit_inverno=' . $_GET['kit_inverno']  . '&kit_verao=' . $_GET['kit_verao'] . '&tam_calcado=' . $_GET['tam_calcado'],
+            'named_params' => array(                                        
+                                        ':escola_id' => $_GET['escola_id'],
+                                        ':ano' => $_GET['ano'],
+                                        ':sexo' => $_GET['sexo'],
+                                        ':kit_inverno' =>$_GET['kit_inverno'],                                        
+                                        ':kit_verao' => $_GET['kit_verao'],                                        
+                                        ':tam_calcado' => $_GET['tam_calcado'],                                        
+                                        ':etapa_id' => $_GET['etapa_id'],
+                                        ':turno' => $_GET['turno']
                                     )     
         );
       
@@ -102,7 +66,7 @@
         //FIM PARTE PAGINAÇÃO RETORNANDO O ARRAY $data['paginate']  QUE VAI PARA A VARIÁVEL $paginate DO VIEW NESSE CASO O INDEX
 
         //SE O BOTÃO CLICADO FOR O IMPRIMIR EU CHAMO A FUNÇÃO getDados($page, $options,1) ONDE 1 É QUE É PARA IMPRIMIR E 0 É PARA LISTAR NA PAGINAÇÃO
-        if($_POST['botao'] == "Imprimir"){  
+        if($_GET['botao'] == "Imprimir"){  
             $data = $this->buscadadosescolarsModel->getDados($page, $options,1);  
             // E AQUI CHAMO O RELATÓRIO          
             $this->view('relatorios/reUniforme' ,$data);
